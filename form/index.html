@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Benjamin and Ellen｜邀請與 RSVP</title>
+    <meta name="description" content="Save the Date for the wedding of Benjamin and Ellen!" />
+    <meta property="og:title" content="Benjamin and Ellen" />
+    <!-- If you use a custom domain, replace https://benjamintu.github.io/wedding below -->
+    <meta property="og:url" content="https://benjamintu.github.io/wedding/form/" />
+    <meta property="og:image" content="https://benjamintu.github.io/wedding/images/logo.png" />
+    <meta property="og:image:secure_url" content="https://benjamintu.github.io/wedding/images/logo.png" />
+    <meta property="og:image:width" content="1536" />
+    <meta property="og:image:height" content="1024" />
+    <meta property="og:image:type" content="image/png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://benjamintu.github.io/wedding/images/logo.png" />
+    <meta property="og:description" content="Save the Date for the wedding of Benjamin and Ellen!" />
+    <meta name="robots" content="noindex,nofollow" />
+    <link rel="stylesheet" href="../css/wedding.css" />
+    <link rel="stylesheet" href="../css/panels.css" />
+    <script>
+      window.WEDDING_CONFIG = {
+        dateIso: "2026-10-03T16:30:00",
+        rsvpFormEmbedUrl:
+          "https://docs.google.com/forms/d/e/1FAIpQLSee29x5BeIaXxvCMAfDQxx_AzlDb5JqcPlQtm8D0gWUDHFzOQ/viewform?embedded=true",
+        rsvpScriptUrl:
+          "https://script.google.com/macros/s/AKfycbyqMrjhvCJE7DsLeh2AKKlAhJlxsNsJy94BWYkl69ep7OAdkjcweGwGJIkZuR6HlV4jDw/exec",
+        rsvpFormResponseUrl: "",
+        rsvpFormEntries: null,
+      };
+    </script>
+  </head>
+  <body>
+    <div class="bg" id="homebg"></div>
+    <div class="bg" id="secondbg"></div>
+
+    <audio loop preload="auto">
+      <source src="https://example.com/placeholder-audio.mp3" type="audio/mpeg" />
+      Your browser does not support the audio element.
+    </audio>
+
+    <header id="header">
+      <img
+        class="header__monogram"
+        src="../images/logo.png"
+        alt=""
+        width="3000"
+        height="200"
+      />
+      <h1 class="header__title">
+        <span class="header__date">2026.10.03</span>
+        <span class="header__names header__names--aligned" lang="zh-Hant">
+          <span class="header__name-part">建邦</span>
+          <span class="header__name-amp">&amp;</span>
+          <span class="header__name-part">佳螢</span>
+        </span>
+        <span class="header__names header__names--aligned">
+          <span class="header__name-part">Benjamin</span>
+          <span class="header__name-amp">&amp;</span>
+          <span class="header__name-part">Ellen</span>
+        </span>
+      </h1>
+      <a class="header__scroll" href="javascript:void(0)" onclick="JumpTo('invite')">
+        <p class="header__scroll-label">Scroll</p>
+        <div id="scroll-line"></div>
+      </a>
+    </header>
+
+    <div id="invite" class="invite panel-card panel-card--invite">
+      <div>
+        <h2 id="invite-heading" class="">we’re getting married</h2>
+        <div class="invite-img"></div>
+      </div>
+      <p class="">
+        誠摯邀請您於 2026.10.03（六）<br />
+        蒞臨台北士林萬麗酒店<br />與我們一同分享這份喜悅
+      </p>
+    </div>
+
+    <div id="intro" class="panel-card panel-card--invite">
+      <div class="intro-box intro-box--unified">
+        <figure class="intro-photo">
+          <img src="../images/invite2.png" alt="" width="908" height="1198" loading="lazy" />
+        </figure>
+        <div class="intro-content intro-content--unified">
+          <p lang="zh-Hant">
+            <span class="intro-content__lede">「古靈精怪的她 x 溫暖幽默的他」</span>
+            <span class="intro-content__divider" aria-hidden="true">✦──────── ♥ ────────✦</span>
+            橫跨七年的遠距離歲月，我們隔著螢幕與城市，陪伴彼此、見證了最青澀的成長。<br />
+            就在相識的第十年，我們決定帶著這份無可取代的默契，堅定地邁向人生下一個篇章.ᐟ.ᐟ
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="RSVP" class="RSVP panel-card panel-card--cream">
+      <h2>RSVP</h2>
+      <div id="RSVParea" class="rsvp-embed-wrap">
+        <iframe
+          id="rsvp-google-form"
+          class="rsvp-google-form-frame"
+          title="婚禮 RSVP 表單"
+          loading="lazy"
+          hidden
+        ></iframe>
+        <p id="rsvp-embed-unconfigured" class="rsvp-embed-placeholder" role="status" hidden>
+          請在頁面中的 <code>WEDDING_CONFIG.rsvpFormEmbedUrl</code> 貼上 Google 表單的嵌入網址（表單編輯畫面 → 傳送 → 嵌入 HTML → 複製
+          <code>iframe</code> 的 <code>src</code>）。
+        </p>
+        <script>
+          (function () {
+            var cfg = window.WEDDING_CONFIG || {};
+            var url = String(cfg.rsvpFormEmbedUrl || "").trim();
+            var iframe = document.getElementById("rsvp-google-form");
+            var hint = document.getElementById("rsvp-embed-unconfigured");
+            if (!iframe) return;
+            if (url) {
+              if (url.indexOf("docs.google.com/forms") !== -1 && url.indexOf("embedded=true") === -1) {
+                url += (url.indexOf("?") === -1 ? "?" : "&") + "embedded=true";
+              }
+              iframe.src = url;
+              iframe.removeAttribute("hidden");
+              if (hint) hint.setAttribute("hidden", "");
+            } else {
+              iframe.setAttribute("hidden", "");
+              if (hint) hint.removeAttribute("hidden");
+            }
+          })();
+        </script>
+      </div>
+    </div>
+
+    <div id="transportation" class="panel-card panel-card--cream">
+      <h2>Transportation</h2>
+      <div id="transportation-box">
+        <div class="map map--embed">
+          <iframe
+            title="台北士林萬麗酒店（婚宴會場）"
+            width="600"
+            height="380"
+            style="border: 0"
+            loading="lazy"
+            allowfullscreen
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.7580642!2d121.5292725!3d25.0932318!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442aea38840c8d1%3A0x8b304b3001673820!2sRenaissance%20Taipei%20Shihlin%20Hotel!5e0!3m2!1szh-TW!2stw!4v1700000000000!5m2!1szh-TW!2stw"
+          ></iframe>
+        </div>
+        <div id="transportation-content">
+          <div class="theplace">
+            <a
+              class="map-open-link"
+              href="https://maps.app.goo.gl/BJDL7HwtyefeuzyX6"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span class="theplace__zh" lang="zh-Hant">台北士林萬麗酒店</span>
+              <span class="theplace__en" lang="en">Renaissance Taipei Shihlin Hotel</span>
+            </a>
+          </div>
+          <div class="guide">
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="currentColor" width="14px" height="14px" style="padding-top: 7px">
+                <path
+                  d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"
+                ></path>
+              </svg>
+            </div>
+            <div>台北市士林區中山北路五段 470 巷 8 號</div>
+
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" width="14px" height="14px" style="padding-top: 7px">
+                <path
+                  d="M96 0C43 0 0 43 0 96L0 352c0 48 35.2 87.7 81.1 94.9l-46 46C28.1 499.9 33.1 512 43 512l39.7 0c8.5 0 16.6-3.4 22.6-9.4L160 448l128 0 54.6 54.6c6 6 14.1 9.4 22.6 9.4l39.7 0c10 0 15-12.1 7.9-19.1l-46-46c46-7.1 81.1-46.9 81.1-94.9l0-256c0-53-43-96-96-96L96 0zM64 96c0-17.7 14.3-32 32-32l256 0c17.7 0 32 14.3 32 32l0 96c0 17.7-14.3 32-32 32L96 224c-17.7 0-32-14.3-32-32l0-96zM224 288a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"
+                ></path>
+              </svg>
+            </div>
+            <div>
+              搭乘捷運至士林站,由2號出口出站,步行約8分鐘即可抵達 <br />
+            </div>
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" width="14px" height="14px" style="padding-top: 7px">
+                <path
+                  d="M135.2 117.4L109.1 192l293.8 0-26.1-74.6C372.3 104.6 360.2 96 346.6 96L165.4 96c-13.6 0-25.7 8.6-30.2 21.4zM39.6 196.8L74.8 96.3C88.3 57.8 124.6 32 165.4 32l181.2 0c40.8 0 77.1 25.8 90.6 64.3l35.2 100.5c23.2 9.6 39.6 32.5 39.6 59.2l0 144 0 48c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-48L96 400l0 48c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-48L0 256c0-26.7 16.4-49.6 39.6-59.2zM128 288a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm288 32a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"
+                ></path>
+              </svg>
+            </div>
+            <div>
+              自行開車前往者,可將車輛停放於士林萬麗停車場 <br />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="panel-card--footer">
+      <div>2026.10.03 期待與你們見面</div>
+      <img
+        class="footer__monogram"
+        src="../images/logo.png"
+        alt=""
+        width="3000"
+        height="200"
+      />
+    </footer>
+
+    <script src="../js/jquery-3.4.1.js"></script>
+    <script src="../js/wedding.js"></script>
+  </body>
+</html>
