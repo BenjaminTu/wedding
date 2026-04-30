@@ -167,16 +167,19 @@ body {
   color: var(--panel-ink);
 }
 
-/* Canelé beside panel section titles (not Album) */
+/* Canelé beside panel section titles (Album uses plain h2 below) */
 #schedule.panel-card > h2,
 #transportation.panel-card > h2,
 #RSVP.panel-card > h2,
-#countdown-area.panel-card > h2 {
+#countdown-area.panel-card > h2,
+.countdown-area.panel-card > h2,
+.photo-video.panel-card > h2 {
   position: relative;
   display: inline-block;
   width: fit-content;
   max-width: 100%;
   margin-top: 0;
+  margin-bottom: 0.75rem;
   margin-left: auto;
   margin-right: auto;
   padding-right: 1.2rem;
@@ -209,7 +212,7 @@ body {
   position: relative;
   top: auto;
   left: auto;
-  margin: 0 auto 1.15rem;
+  margin: 0 auto 0.6rem;
   z-index: 2;
   white-space: normal;
   text-align: center;
@@ -384,7 +387,7 @@ body {
 #intro.panel-card .intro-photo {
   margin: 0 auto;
   padding: 0;
-  /* Portrait frame matching invite2.png (908×1198) */
+  /* Portrait frame (e.g. invite / couple photo) */
   width: min(280px, 72vw);
   max-width: 100%;
   aspect-ratio: 908 / 1198;
@@ -470,6 +473,22 @@ body {
   color: var(--panel-accent);
 }
 
+@media screen and (max-width: 799px) {
+  #schedule.panel-card #timeline {
+    padding-top: 1.25rem;
+  }
+
+  #schedule.panel-card #timeline::before {
+    top: 3.6rem;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  #schedule.panel-card #timeline {
+    padding-top: 1.25rem;
+  }
+}
+
 /* Transportation — same treatment as Schedule */
 #transportation.panel-card {
   padding-top: 3rem;
@@ -478,7 +497,6 @@ body {
 }
 
 #transportation.panel-card > h2 {
-  margin-bottom: 2rem;
   background: none;
   border-radius: 0;
   color: var(--panel-accent);
@@ -608,6 +626,7 @@ body {
   line-height: 1.85;
   letter-spacing: 3px;
   text-indent: 0;
+  padding: 0.45rem 0;
 }
 
 .countdown-area.panel-card .countdown-area-box > div {
@@ -669,6 +688,10 @@ body {
   color: var(--panel-accent);
 }
 
+.countdown-area.panel-card .countdown-area-box {
+  margin-top: 0.45rem;
+}
+
 /* RSVP — same shell size / rhythm as Transportation */
 #RSVP.panel-card {
   display: flex;
@@ -682,7 +705,6 @@ body {
 }
 
 #RSVP.panel-card > h2 {
-  margin-bottom: 2rem;
   background: none;
   border-radius: 0;
   color: var(--panel-accent);

@@ -29,22 +29,22 @@ function setBgOpacity(el, opacity) {
     el.style.opacity = opacity ? "1" : "0";
 }
 
-/* Once the invite title has triggered the blurred second bg, keep it for the rest of the page until we return to the hero */
+/* Once the intro photo has triggered the blurred second bg, keep it for the rest of the page until we return to the hero */
 var weddingSecondBgLocked = false;
 
-/* Second hero image: when “we’re getting married” (#invite-heading) shows — same rule as reveal() for .invite h2 (elementVisible 150) */
+/* Second hero image: when intro picture (#intro .intro-photo) crosses the reveal line — same inset as reveal() (WEDDING_SCROLL_REVEAL_INSET) */
 function revealSecondBg(){
     var el = document.getElementById("secondbg");
     var home = document.getElementById("homebg");
     if (!el) return;
-    var heading = document.getElementById("invite-heading");
-    if (!heading) return;
+    var introPhoto = document.querySelector("#intro .intro-photo");
+    if (!introPhoto) return;
     var scrollY = window.scrollY || window.pageYOffset || 0;
     if (scrollY < 80) {
         weddingSecondBgLocked = false;
     } else {
         var windowHeight = window.innerHeight;
-        var elementTop = heading.getBoundingClientRect().top;
+        var elementTop = introPhoto.getBoundingClientRect().top;
         if (elementTop < windowHeight - WEDDING_SCROLL_REVEAL_INSET) {
             weddingSecondBgLocked = true;
         }
@@ -411,6 +411,80 @@ revealSecondBg();
         audio.addEventListener("pause", syncAudioToggle);
         document.body.appendChild(audioToggleBtn);
         syncAudioToggle();
+        installMusicHint();
+    }
+
+    var weddingMusicHintKey = "weddingAudioHintDismissed";
+
+    function installMusicHint() {
+        if (!hasValidSrc()) return;
+        try {
+            if (window.localStorage && window.localStorage.getItem(weddingMusicHintKey)) return;
+        } catch (eLS) {}
+
+        var hintRoot = null;
+        var onKeyDown = null;
+
+        function closeMusicHint() {
+            if (onKeyDown) {
+                document.removeEventListener("keydown", onKeyDown);
+                onKeyDown = null;
+            }
+            try {
+                if (window.localStorage) window.localStorage.setItem(weddingMusicHintKey, "1");
+            } catch (eLS2) {}
+            if (hintRoot && hintRoot.parentNode) {
+                hintRoot.parentNode.removeChild(hintRoot);
+            }
+            hintRoot = null;
+            document.body.style.overflow = "";
+        }
+
+        function openMusicHint() {
+            if (hintRoot) return;
+            hintRoot = document.createElement("div");
+            hintRoot.className = "wedding-audio-hint";
+            hintRoot.setAttribute("role", "dialog");
+            hintRoot.setAttribute("aria-modal", "true");
+            hintRoot.setAttribute("aria-labelledby", "wedding-audio-hint-title");
+            hintRoot.setAttribute("lang", "zh-Hant");
+
+            var box = document.createElement("div");
+            box.className = "wedding-audio-hint__box";
+
+            var p = document.createElement("p");
+            p.id = "wedding-audio-hint-title";
+            p.className = "wedding-audio-hint__text";
+            p.textContent =
+                "本頁會播放背景音樂。若想關閉，請點選畫面右下角的音樂按鈕。";
+
+            var btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "wedding-audio-hint__btn";
+            btn.textContent = "知道了";
+
+            box.appendChild(p);
+            box.appendChild(btn);
+            hintRoot.appendChild(box);
+
+            btn.addEventListener("click", closeMusicHint);
+            hintRoot.addEventListener("click", function (ev) {
+                if (ev.target === hintRoot) closeMusicHint();
+            });
+
+            onKeyDown = function (ev) {
+                if (ev.key === "Escape") closeMusicHint();
+            };
+            document.addEventListener("keydown", onKeyDown);
+
+            document.body.style.overflow = "hidden";
+            document.body.appendChild(hintRoot);
+            try {
+                btn.focus();
+            } catch (eF) {}
+        }
+
+        window.setTimeout(openMusicHint, 450);
     }
 
     function init() {

@@ -156,14 +156,19 @@ header .header__scroll-label{
 }
 
 #homebg{
-    background-image: url("../images/5YI00756.JPG");
-    background-position: center 100%;
+    background-image: url("../images/hero-home.jpg");
+    /* Full viewport height so bottom-anchored image leaves no empty band at the top */
+    background-size: auto min(100vh, 100%);
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-color: rgb(16, 20, 17);
     z-index: -102;
     opacity: 1;
 }
 #secondbg{
-    background-image: url("../images/5YI01374.JPG");
-    background-position: center center;
+    background-image: url("../images/hero-second.jpg");
+    /* Anchor lower in the frame so the couple sits under the monogram / titles */
+    background-position: center 82%;
     z-index: -101;
     opacity: 0;
     filter: blur(12px);
@@ -256,7 +261,7 @@ header .header__scroll-label{
     aspect-ratio: 1 / 1.5;
     border-radius: 200px 200px 0 0;
     margin: auto;
-    background-image: url('../images/invite.png');
+    background-image: url("../images/IMG_9158.JPG");
     background-size: cover;
     background-position: 50% 50%;
 }
@@ -1364,4 +1369,92 @@ footer div a:hover, footer div a:active{
     transform: translate(-50%, -50%) rotate(-52deg);
     opacity: 0.9;
     pointer-events: none;
+}
+
+/* One-time hint: music can be turned off (bottom-right control) — below toggle z-index so the button stays visible */
+.wedding-audio-hint {
+    position: fixed;
+    inset: 0;
+    z-index: 205;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    padding-left: max(1.25rem, env(safe-area-inset-left, 0px));
+    padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
+    padding-bottom: max(1.25rem, env(safe-area-inset-bottom, 0px));
+    box-sizing: border-box;
+    background: rgba(22, 18, 16, 0.48);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    text-indent: 0;
+    animation: wedding-audio-hint-in 0.35s ease-out;
+}
+
+@keyframes wedding-audio-hint-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.wedding-audio-hint__box {
+    max-width: 22rem;
+    width: 100%;
+    margin: 0;
+    padding: 1.35rem 1.4rem 1.25rem;
+    border-radius: 16px;
+    box-sizing: border-box;
+    background: rgba(249, 248, 246, 0.98);
+    border: 1px solid rgba(118, 104, 92, 0.22);
+    box-shadow: 0 12px 40px rgba(28, 22, 18, 0.2), 0 1px 0 rgba(255, 255, 255, 0.85) inset;
+    color: var(--mt-ink);
+    font-family: "Noto Serif TC", "Songti TC", "PingFang TC", serif;
+    font-weight: 500;
+    font-size: clamp(0.9375rem, 2.8vw, 1.0625rem);
+    line-height: 1.75;
+    letter-spacing: 0.06em;
+    text-align: center;
+}
+
+.wedding-audio-hint__text {
+    margin: 0 0 1.15rem;
+}
+
+.wedding-audio-hint__btn {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0.65rem 1rem;
+    box-sizing: border-box;
+    border-radius: 999px;
+    border: 1px solid rgba(118, 104, 92, 0.35);
+    background: rgb(118, 98, 82);
+    color: #fff;
+    font-family: inherit;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.wedding-audio-hint__btn:hover,
+.wedding-audio-hint__btn:focus-visible {
+    background: rgb(132, 110, 92);
+    outline: none;
+}
+
+.wedding-audio-hint__btn:active {
+    transform: scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wedding-audio-hint {
+        animation: none;
+    }
 }
