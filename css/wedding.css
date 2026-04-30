@@ -83,7 +83,8 @@ header{
     color: rgb(255, 255, 255);
     overflow: hidden;
     box-sizing: border-box;
-    padding: 2rem 1.25rem 6rem;
+    padding: 2rem 1.25rem max(1rem, env(safe-area-inset-bottom, 0px));
+    touch-action: pan-y;
 }
 
 header img:not(.header__monogram){
@@ -102,37 +103,46 @@ header .header__scroll{
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 110px;
-    bottom: 5.5rem;
+    justify-content: center;
+    min-height: 2.75rem;
+    padding: 0.2rem 0.4rem;
+    bottom: max(0.2rem, calc(env(safe-area-inset-bottom, 0px) + 0.15rem));
     text-decoration: none;
     color: rgba(255, 255, 255,0.9);
+    /* Let vertical page scroll pass through this control on touch devices */
+    touch-action: pan-y;
 }
 
-header a p,
-header .header__scroll-label{
-    font-size: 11px;
-    letter-spacing: 0.35em;
-    padding-bottom: 10px;
-    text-transform: uppercase;
-    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    font-weight: 500;
-}
-
+/* Down chevron only; whole icon nudges up/down (small motion) */
 #scroll-line{
     display: block;
-    height: 0;
-    border-left: 1px solid rgba(255, 255, 255, 0.3);
+    box-sizing: border-box;
+    width: 1.25rem;
+    height: 1.35rem;
+    margin: 0 auto;
+    line-height: 0;
+    color: rgba(255, 255, 255, 0.9);
+    transform: translateY(0);
     animation-name: scroll-line;
+    animation-duration: 1.35s;
+    animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
-    animation-duration: 1s;
+    will-change: transform;
+}
+
+#scroll-line svg {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 @keyframes scroll-line{
-    0% {
-        height: 0;
-    }
+    0%,
     100% {
-        height: 60px;
+        transform: translateY(-2px);
+    }
+    50% {
+        transform: translateY(2px);
     }
 }
 
@@ -157,10 +167,10 @@ header .header__scroll-label{
 
 #homebg{
     background-image: url("../images/hero-home.jpg");
-    /* Full viewport height so bottom-anchored image leaves no empty band at the top */
-    background-size: auto min(100vh, 100%);
+    background-size: cover;
     background-repeat: no-repeat;
-    background-position: center bottom;
+    /* Slightly lower than center-bottom so the frame sits a bit lower in the viewport */
+    background-position: center 98%;
     background-color: rgb(16, 20, 17);
     z-index: -102;
     opacity: 1;
@@ -183,7 +193,7 @@ header .header__scroll-label{
 
     #scroll-line {
         animation: none;
-        height: 40px;
+        transform: translateY(0);
     }
 
     #secondbg {

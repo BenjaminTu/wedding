@@ -59,6 +59,7 @@ body {
   max-width: min(92vw, 300px);
   max-height: 200px;
   margin-inline: auto;
+  margin-top: -0.5rem;
   object-fit: contain;
   object-position: top center;
   flex-shrink: 0;
@@ -131,7 +132,7 @@ body {
 #header .header__scroll {
   position: absolute;
   left: 50%;
-  bottom: clamp(4rem, 10vh, 7.5rem);
+  bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
   transform: translateX(-50%);
   z-index: 2;
   width: max-content;
@@ -140,7 +141,7 @@ body {
 }
 
 #header #scroll-line {
-  border-left-color: rgba(255, 248, 242, 0.55);
+  color: rgba(255, 248, 242, 0.92);
 }
 
 /* Shared “floating card” shell */
@@ -875,14 +876,24 @@ footer.panel-card--footer .footer__monogram {
   header {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: minmax(0, 0.85fr) auto auto auto minmax(0, 1.15fr);
+    /* Top breathing · monogram · title · flex gap · scroll pinned to viewport bottom */
+    grid-template-rows: minmax(0, 0.4fr) auto auto 1fr auto;
     justify-items: center;
-    align-content: center;
+    align-content: start;
     width: 100%;
     min-height: 100dvh;
     min-height: 100svh;
-    padding: max(0.65rem, env(safe-area-inset-top, 0px)) 1rem max(1.25rem, env(safe-area-inset-bottom, 0px));
+    padding: max(0.65rem, env(safe-area-inset-top, 0px)) 1rem max(0.5rem, env(safe-area-inset-bottom, 0px));
     box-sizing: border-box;
+    touch-action: pan-y;
+    /* Don’t trap vertical scroll (overflow:hidden on hero was blocking iOS) */
+    overflow-x: hidden;
+    overflow-y: visible;
+  }
+
+  /* Pass drags through logo + titles; only the Scroll control stays tappable */
+  #header > *:not(.header__scroll) {
+    pointer-events: none;
   }
 
   #header .header__monogram {
@@ -902,18 +913,20 @@ footer.panel-card--footer .footer__monogram {
     gap: 0.55rem;
   }
 
-  /* Fixed height so #scroll-line height animation doesn’t change grid row size —
-     otherwise align-content: center shifts the monogram + title every frame. */
+  /* Stable row height for scroll cue (clip-path animation on #scroll-line) */
   #header .header__scroll {
-    grid-row: 4;
+    grid-row: 5;
     position: static;
     transform: none;
     left: auto;
     bottom: auto;
-    height: 110px;
-    min-height: 110px;
+    min-height: 2.75rem;
+    height: auto;
     box-sizing: border-box;
-    margin-top: 0.5rem;
+    margin-top: 0;
+    align-self: center;
+    touch-action: pan-y;
+    pointer-events: auto;
   }
 }
 
