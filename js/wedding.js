@@ -312,22 +312,131 @@ revealSecondBg();
     window.weddingAlbumReset();
 })();
 
-(function weddingAudioAutoplay() {
-    function tryPlay() {
-        var audio = document.querySelector("audio");
-        if (!audio) return;
-        var result = audio.play();
-        if (result && typeof result.catch === "function") {
-            result.catch(function () {});
+(function weddingBackgroundAudio() {
+    var cfg = window.WEDDING_CONFIG || {};
+    var audioSrc = cfg.audioSrc;
+    var audio = document.querySelector("audio");
+    if (!audio) return;
+
+    function hasValidSrc() {
+        if (audioSrc) return true;
+        try {
+            var u = audio.currentSrc || audio.src;
+            return !!(u && String(u).indexOf("example.com") === -1);
+        } catch (e) {
+            return false;
         }
     }
 
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", tryPlay);
-    } else {
-        tryPlay();
+    if (audioSrc) {
+        audio.src = audioSrc;
+        audio.loop = true;
     }
 
-    document.addEventListener("click", tryPlay, { once: true });
-    document.addEventListener("touchend", tryPlay, { once: true, passive: true });
+    try {
+        audio.defaultMuted = false;
+        audio.muted = false;
+        audio.volume = 1;
+    } catch (eVol) {}
+
+    function attemptPlay() {
+        if (!hasValidSrc()) return Promise.resolve();
+        try {
+            var result = audio.play();
+            if (result && typeof result.then === "function") {
+                return result.catch(function () {});
+            }
+        } catch (err) {}
+        return Promise.resolve();
+    }
+
+    /** When guest has turned music off via the control, do not auto-restart on random taps. */
+    var userTurnedMusicOff = false;
+
+    function tryPlayAuto() {
+        if (userTurnedMusicOff) return;
+        attemptPlay();
+    }
+
+    var audioToggleBtn = null;
+
+    function syncAudioToggle() {
+        if (!audioToggleBtn) return;
+        var playing = !audio.paused;
+        audioToggleBtn.classList.toggle("wedding-audio-toggle--off", !playing);
+        audioToggleBtn.setAttribute("aria-pressed", playing ? "true" : "false");
+        audioToggleBtn.setAttribute("aria-label", playing ? "關閉背景音樂" : "開啟背景音樂");
+    }
+
+    function installAudioToggle() {
+        if (audioToggleBtn || !hasValidSrc()) return;
+        audioToggleBtn = document.createElement("button");
+        audioToggleBtn.type = "button";
+        audioToggleBtn.className = "wedding-audio-toggle";
+        audioToggleBtn.setAttribute("lang", "zh-Hant");
+        audioToggleBtn.innerHTML =
+            '<svg class="wedding-audio-toggle__icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" aria-hidden="true">' +
+            '<path d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />' +
+            "</svg>" +
+            '<span class="wedding-audio-toggle__sr">背景音樂</span>';
+        audioToggleBtn.setAttribute("aria-pressed", "false");
+        audioToggleBtn.setAttribute("aria-label", "開啟背景音樂");
+        var lastMusicToggleAt = 0;
+        function handleMusicToggle(ev) {
+            ev.stopPropagation();
+            var now = Date.now();
+            if (now - lastMusicToggleAt < 320) return;
+            lastMusicToggleAt = now;
+            if (audio.paused) {
+                userTurnedMusicOff = false;
+                Promise.resolve(attemptPlay()).finally(syncAudioToggle);
+            } else {
+                userTurnedMusicOff = true;
+                audio.pause();
+                syncAudioToggle();
+            }
+        }
+        audioToggleBtn.addEventListener("click", handleMusicToggle);
+        audioToggleBtn.addEventListener(
+            "touchend",
+            function (ev) {
+                if (!audioToggleBtn.contains(ev.target)) return;
+                ev.stopPropagation();
+                if (ev.cancelable) ev.preventDefault();
+                handleMusicToggle(ev);
+            },
+            { passive: false }
+        );
+        audio.addEventListener("play", syncAudioToggle);
+        audio.addEventListener("pause", syncAudioToggle);
+        document.body.appendChild(audioToggleBtn);
+        syncAudioToggle();
+    }
+
+    function init() {
+        installAudioToggle();
+        audio.addEventListener(
+            "canplay",
+            function () {
+                tryPlayAuto();
+            },
+            { once: true }
+        );
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+    } else {
+        init();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", tryPlayAuto);
+    } else {
+        tryPlayAuto();
+    }
+
+    document.addEventListener("click", tryPlayAuto);
+    document.addEventListener("touchend", tryPlayAuto, { passive: true });
+    window.addEventListener("load", tryPlayAuto, { once: true });
 })();

@@ -3,6 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <link rel="icon" type="image/png" sizes="1024x1024" href="../images/favicon.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="../images/favicon-192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../images/apple-touch-icon.png" />
     <title>Benjamin and Ellen</title>
     <meta name="description" content="Save the Date for the wedding of Benjamin and Ellen!" />
     <meta property="og:title" content="Benjamin and Ellen" />
@@ -23,6 +26,8 @@
       window.WEDDING_CONFIG = {
         /** 婚禮日期（倒數）；RSVP 請見 /form/ */
         dateIso: "2026-10-03T16:30:00",
+        /** 背景音：請放「已剪好、可無縫循環」的短 MP3；瀏覽器用 native loop 重播整檔 */
+        audioSrc: "../audio/bg-loop.mp3",
       };
     </script>
   </head>
@@ -30,11 +35,9 @@
     <div class="bg" id="homebg"></div>
     <div class="bg" id="secondbg"></div>
 
-    <audio loop preload="auto">
-      <source src="https://example.com/placeholder-audio.mp3" type="audio/mpeg" />
-      Your browser does not support the audio element.
-    </audio>
+    <audio preload="auto" playsinline autoplay loop></audio>
 
+    <div class="page-scroll">
     <header id="header">
       <img
         class="header__monogram"
@@ -258,6 +261,7 @@
         height="200"
       />
     </footer>
+    </div>
 
     <script src="../js/jquery-3.4.1.js"></script>
     <script src="../js/wedding.js"></script>
