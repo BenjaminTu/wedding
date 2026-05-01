@@ -182,6 +182,82 @@ header .header__scroll{
     scroll-behavior: smooth;
 }
 
+/* Home: snap slot wrapper is layout-transparent on wide viewports (inner .panel-card flows as before). */
+@media (min-width: 769px) {
+    body.page-home .page-scroll > .mobile-snap-slot {
+        display: contents;
+    }
+}
+
+/*
+ * Mobile: one full-viewport “step” per scroll (see .mobile-snap-section on major blocks in HTML).
+ * Desktop/tablet wide: unchanged — no snap rules outside this query.
+ */
+@media (max-width: 768px) {
+    .page-scroll {
+        scroll-snap-type: y mandatory;
+    }
+
+    .page-scroll > .mobile-snap-section {
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+        min-height: 100dvh;
+        min-height: 100svh;
+        box-sizing: border-box;
+    }
+
+    /*
+     * Mandatory snap otherwise has no valid position past the last full section,
+     * so the browser snaps back (e.g. to transportation). End-align the footer so
+     * “scroll to bottom” is a real snap target without making the footer a full screen.
+     */
+    .page-scroll > footer.panel-card--footer {
+        scroll-snap-align: end;
+        scroll-snap-stop: normal;
+    }
+
+    /*
+     * Home only: snap slot is full viewport; the bordered .panel-card inside stays content-height
+     * and is centered (background shows in the margin). Tall cards still grow the slot as usual.
+     */
+    body.page-home .page-scroll > .mobile-snap-slot {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: stretch;
+        box-sizing: border-box;
+    }
+
+    body.page-home .page-scroll > .mobile-snap-slot > .panel-card {
+        margin-block: 0;
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
+    .page-scroll {
+        scroll-snap-type: none;
+    }
+
+    .page-scroll > .mobile-snap-section {
+        min-height: 0;
+        scroll-snap-align: unset;
+        scroll-snap-stop: normal;
+    }
+
+    .page-scroll > footer.panel-card--footer {
+        scroll-snap-align: unset;
+    }
+
+    body.page-home .page-scroll > .mobile-snap-slot {
+        display: block;
+    }
+
+    body.page-home .page-scroll > .mobile-snap-slot > .panel-card {
+        margin-block: unset;
+    }
+}
+
 .bg{
     width: 100%;
     height: 100%;

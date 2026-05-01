@@ -1,11 +1,4 @@
-/** After programmatic scroll (chevron etc.), ignore chapter proximity snap briefly */
-var weddingSnapSuppressUntil = 0;
-function weddingSuppressChapterSnap(ms) {
-    weddingSnapSuppressUntil = Date.now() + (ms || 700);
-}
-
 function JumpTo(id) {
-    weddingSuppressChapterSnap(900);
     var jumpto = document.getElementById(id);
     if (!jumpto) return;
     jumpto.scrollIntoView({ block: "start", behavior: "smooth" });
@@ -31,7 +24,7 @@ function updateHeaderScrollCue() {
     }
 }
 
-/** Vertical scroll lives on `.page-scroll` (optional JS chapter proximity snap); not on window */
+/** Vertical scroll lives on `.page-scroll`; not on window */
 function weddingMainScroller() {
     return document.querySelector(".page-scroll");
 }
@@ -50,128 +43,11 @@ function weddingBindScroll(handler) {
     }
 }
 
-var weddingChapterEaseRaf = null;
-
-function weddingIsChapterEaseRunning() {
-    return weddingChapterEaseRaf != null;
-}
-
-/** Slower than native `scroll-behavior: smooth` — eased scroll over ~0.8–1.2s */
-function weddingEaseScrollChapterSnap(scroller, targetTop, durationMs) {
-    if (weddingChapterEaseRaf != null) {
-        cancelAnimationFrame(weddingChapterEaseRaf);
-        weddingChapterEaseRaf = null;
-    }
-    var from = scroller.scrollTop;
-    var dist = targetTop - from;
-    if (Math.abs(dist) < 2) return;
-    var dur = durationMs || 900;
-    var t0 = performance.now();
-    weddingSuppressChapterSnap(dur + 280);
-
-    function easeInOutCubic(t) {
-        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-    }
-
-    function tick(now) {
-        var u = Math.min(1, (now - t0) / dur);
-        var e = easeInOutCubic(u);
-        scroller.scrollTop = Math.round(from + dist * e);
-        if (u < 1) {
-            weddingChapterEaseRaf = requestAnimationFrame(tick);
-        } else {
-            weddingChapterEaseRaf = null;
-            scroller.scrollTop = targetTop;
-            reveal();
-            revealSecondBg();
-        }
-    }
-    weddingChapterEaseRaf = requestAnimationFrame(tick);
-}
-
-/**
- * When scrolling stops (down only): if within a small band of the next .scroll-chapter start, align there; otherwise leave scroll unchanged.
- */
-function weddingMaybeSnapChapter(scroller, dir) {
-    if (!scroller || dir === 0) return;
-    if (dir < 0) return;
-    if (Date.now() < weddingSnapSuppressUntil) return;
-    var mq = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mq && mq.matches) return;
-
-    var chapters = scroller.querySelectorAll(".scroll-chapter");
-    if (!chapters.length) return;
-
-    var sr = scroller.getBoundingClientRect();
-    var tops = [];
-    for (var k = 0; k < chapters.length; k++) {
-        var cr = chapters[k].getBoundingClientRect();
-        tops.push(Math.round(scroller.scrollTop + (cr.top - sr.top)));
-    }
-
-    var y = scroller.scrollTop;
-    var vh = scroller.clientHeight || 0;
-    var band = Math.max(88, Math.min(220, Math.round(vh * 0.22)));
-    /** Must have scrolled this far into the current chapter before a downward snap to the next */
-    var minInPrev = Math.max(96, Math.round(vh * 0.12));
-    var target = null;
-
-    for (var i = 0; i < tops.length; i++) {
-        if (tops[i] > y + 1) {
-            var dn = tops[i] - y;
-            if (dn <= 0 || dn > band) break;
-            if (i > 0 && y - tops[i - 1] < minInPrev) break;
-            target = tops[i];
-            break;
-        }
-    }
-
-    if (target == null) return;
-    if (Math.abs(y - target) < 3) return;
-
-    var travel = Math.abs(target - y);
-    var dur = Math.min(1200, Math.max(820, 650 + travel * 0.42));
-    weddingEaseScrollChapterSnap(scroller, target, dur);
-}
-
-function weddingInitChapterProximitySnap() {
-    var scroller = weddingMainScroller();
-    if (!scroller) return;
-    var mq = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mq && mq.matches) return;
-    if (!scroller.querySelector(".scroll-chapter")) return;
-
-    var lastST = scroller.scrollTop;
-    var burst = 0;
-    var deb;
-    scroller.addEventListener(
-        "scroll",
-        function () {
-            if (Date.now() < weddingSnapSuppressUntil) {
-                lastST = scroller.scrollTop;
-                burst = 0;
-                return;
-            }
-            var n = scroller.scrollTop;
-            burst += n - lastST;
-            lastST = n;
-            clearTimeout(deb);
-            deb = setTimeout(function () {
-                var dir = burst > 12 ? 1 : burst < -12 ? -1 : 0;
-                burst = 0;
-                weddingMaybeSnapChapter(scroller, dir);
-            }, 200);
-        },
-        { passive: true }
-    );
-}
-
 /* Pixels from bottom of viewport — element is “revealed” when its top crosses above this line (shared with revealSecondBg) */
 var WEDDING_SCROLL_REVEAL_INSET = 150;
 
 //
 function reveal(){
-    if (weddingIsChapterEaseRunning()) return;
     var reveals = document.querySelectorAll(".countdown-area-box>div,#photo-gallery,.dresscode-box,.intro-box,.intro-content,.time")
     for (var i = 0; i < reveals.length; i++){
         var windowHeight = window.innerHeight;
@@ -199,7 +75,6 @@ var weddingSecondBgLocked = false;
 
 /* Second hero image: when intro picture (#intro .intro-photo) crosses the reveal line — same inset as reveal() (WEDDING_SCROLL_REVEAL_INSET) */
 function revealSecondBg(){
-    if (weddingIsChapterEaseRunning()) return;
     var el = document.getElementById("secondbg");
     var home = document.getElementById("homebg");
     if (!el) return;
@@ -293,7 +168,6 @@ var x = setInterval(function() {
 reveal();
 revealSecondBg();
 updateHeaderScrollCue();
-weddingInitChapterProximitySnap();
 
 (function initAlbumGallery() {
     var root = document.getElementById("photo-gallery");
