@@ -32,16 +32,51 @@
 }
 
 html {
-    scroll-behavior: smooth;
+    height: 100%;
+    overflow: hidden;
+}
+
+.snap-section {
+    scroll-snap-align: start;
+    scroll-snap-stop: normal;
+}
+
+/* Prevents a single fast wheel/trackpad gesture from skipping past this block */
+.snap-section--step {
+    scroll-snap-stop: always;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .page-scroll {
+        scroll-snap-type: none;
+        scroll-behavior: auto;
+    }
+
+    .snap-section,
+    .snap-section--step {
+        scroll-snap-align: unset;
+        scroll-snap-stop: normal;
+    }
 }
 body,
 html {
     height: 100%;
 }
 
+body > audio {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
 body {
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     font-family: 'Aboreto','Noto Serif TC',serif;
     color: var(--mt-ink);
     background-color: var(--mt-latte);
@@ -146,10 +181,17 @@ header .header__scroll{
     }
 }
 
-/* Clips wide in-flow content only; fixed .bg layers stay outside so blur/scale aren’t clipped */
+/* Main scrollport: fills viewport under in-flow siblings (e.g. audio); snap binds to this overflow box */
 .page-scroll {
-    overflow-x: hidden;
+    box-sizing: border-box;
+    flex: 1 1 auto;
+    min-height: 0;
     max-width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
 }
 
 .bg{
@@ -876,6 +918,10 @@ header .header__scroll{
 }
 
 body.album-lightbox-open{
+    overflow: hidden;
+}
+
+body.album-lightbox-open .page-scroll {
     overflow: hidden;
 }
 

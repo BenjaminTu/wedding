@@ -4,6 +4,25 @@ function JumpTo(id) {
     jumpto.scrollIntoView({ block: 'start' , behavior: 'smooth' });
 }
 
+/** Vertical scroll lives on `.page-scroll` (CSS scroll-snap); not on window */
+function weddingMainScroller() {
+    return document.querySelector(".page-scroll");
+}
+
+function weddingScrollTop() {
+    var s = weddingMainScroller();
+    return s ? s.scrollTop : window.scrollY || window.pageYOffset || 0;
+}
+
+function weddingBindScroll(handler) {
+    var s = weddingMainScroller();
+    if (s) {
+        s.addEventListener("scroll", handler, { passive: true });
+    } else {
+        window.addEventListener("scroll", handler, { passive: true });
+    }
+}
+
 /* Pixels from bottom of viewport — element is “revealed” when its top crosses above this line (shared with revealSecondBg) */
 var WEDDING_SCROLL_REVEAL_INSET = 150;
 
@@ -21,7 +40,7 @@ function reveal(){
         }
     }
 }
-window.addEventListener("scroll",reveal)
+weddingBindScroll(reveal);
 
 //
 function setBgOpacity(el, opacity) {
@@ -39,7 +58,7 @@ function revealSecondBg(){
     if (!el) return;
     var introPhoto = document.querySelector("#intro .intro-photo");
     if (!introPhoto) return;
-    var scrollY = window.scrollY || window.pageYOffset || 0;
+    var scrollY = weddingScrollTop();
     if (scrollY < 80) {
         weddingSecondBgLocked = false;
     } else {
@@ -58,7 +77,7 @@ function revealSecondBg(){
         setBgOpacity(home, true);
     }
 }
-window.addEventListener("scroll", revealSecondBg);
+weddingBindScroll(revealSecondBg);
 window.addEventListener("resize", revealSecondBg);
 
 
@@ -121,6 +140,7 @@ var x = setInterval(function() {
   }
 }, 1000);
 
+reveal();
 revealSecondBg();
 
 (function initAlbumGallery() {
@@ -438,6 +458,8 @@ revealSecondBg();
             }
             hintRoot = null;
             document.body.style.overflow = "";
+            var psUnlock = document.querySelector(".page-scroll");
+            if (psUnlock) psUnlock.style.overflow = "";
         }
 
         function openMusicHint() {
@@ -478,6 +500,8 @@ revealSecondBg();
             document.addEventListener("keydown", onKeyDown);
 
             document.body.style.overflow = "hidden";
+            var psLock = document.querySelector(".page-scroll");
+            if (psLock) psLock.style.overflow = "hidden";
             document.body.appendChild(hintRoot);
             try {
                 btn.focus();
