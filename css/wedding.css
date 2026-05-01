@@ -36,28 +36,6 @@ html {
     overflow: hidden;
 }
 
-.snap-section {
-    scroll-snap-align: start;
-    scroll-snap-stop: normal;
-}
-
-/* Prevents a single fast wheel/trackpad gesture from skipping past this block */
-.snap-section--step {
-    scroll-snap-stop: always;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .page-scroll {
-        scroll-snap-type: none;
-        scroll-behavior: auto;
-    }
-
-    .snap-section,
-    .snap-section--step {
-        scroll-snap-align: unset;
-        scroll-snap-stop: normal;
-    }
-}
 body,
 html {
     height: 100%;
@@ -146,6 +124,17 @@ header .header__scroll{
     color: rgba(255, 255, 255,0.9);
     /* Let vertical page scroll pass through this control on touch devices */
     touch-action: pan-y;
+    transition: opacity 0.28s ease, visibility 0.28s ease;
+}
+
+.header__scroll.header__scroll--hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.header__scroll.header__scroll--hidden #scroll-line {
+    animation: none;
 }
 
 /* Down chevron only; whole icon nudges up/down (small motion) */
@@ -181,7 +170,7 @@ header .header__scroll{
     }
 }
 
-/* Main scrollport: fills viewport under in-flow siblings (e.g. audio); snap binds to this overflow box */
+/* Main scrollport: fills viewport under in-flow siblings (e.g. audio) */
 .page-scroll {
     box-sizing: border-box;
     flex: 1 1 auto;
@@ -191,7 +180,6 @@ header .header__scroll{
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
-    scroll-snap-type: y mandatory;
 }
 
 .bg{
@@ -240,6 +228,10 @@ header .header__scroll{
 
     #secondbg {
         filter: blur(4px);
+    }
+
+    .page-scroll {
+        scroll-behavior: auto;
     }
 }
 
@@ -324,30 +316,12 @@ header .header__scroll{
     width: 100%;
     margin: 0 0 1.25rem 0;
     text-align: center;
-    opacity: 0;
-    transition: 0.7s;
-    transform: translateY(50px);
 }
-
-#invite h2.active{
-    opacity: 1;
-    transform: translateY(0);
-}
-
 
 #invite p{
     padding: 30px 20px 0 20px;
     text-indent: 6px;
     letter-spacing: 6px;
-    opacity: 0;
-    transition: 0.7s;
-    transition-delay: 0.1s;
-    transform: translateY(50px);
-}
-
-#invite p.active{
-    opacity: 1;
-    transform: translateY(0);
 }
 
 #schedule:not(.panel-card) {
