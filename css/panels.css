@@ -349,6 +349,8 @@ body {
   align-items: center;
   flex-wrap: nowrap;
   gap: 0;
+  /* Legacy #invite / #intro use overflow:hidden — clips last lines when flex/snap layout is tight */
+  overflow: visible;
 }
 
 #invite.panel-card.panel-card--invite {

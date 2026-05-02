@@ -210,7 +210,9 @@ header .header__scroll{
        sits above the snap point and scrolls away, so cards look flush to the top.
        Home `.mobile-snap-slot` is excluded: short cards are flex-centered in the
        viewport — scroll-margin here adds uneven top gap vs bottom. */
-    .page-scroll > .mobile-snap-section:not(#header):not(.mobile-snap-slot) {
+    /* Exclude #intro / #invite: they are full-viewport transparent steps on /form/; scroll-margin-top
+       here offset the snap by ~safe-area while min-height stayed 100svh, hiding the bottom copy. */
+    .page-scroll > .mobile-snap-section:not(#header):not(.mobile-snap-slot):not(#intro):not(#invite) {
         scroll-margin-top: max(1.25rem, calc(env(safe-area-inset-top, 0px) + 0.75rem));
     }
 
@@ -259,6 +261,7 @@ header .header__scroll{
     body.page-home .page-scroll > .mobile-snap-slot > .panel-card {
         margin-block: 0;
         width: 100%;
+        flex-shrink: 0;
     }
 }
 
