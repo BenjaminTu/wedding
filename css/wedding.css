@@ -1557,6 +1557,13 @@ footer div a:hover, footer div a:active{
     margin: 0 0 1.15rem;
 }
 
+.wedding-audio-hint__text--note {
+    font-size: 0.86em;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    opacity: 0.92;
+}
+
 .wedding-audio-hint__btn {
     display: block;
     width: 100%;

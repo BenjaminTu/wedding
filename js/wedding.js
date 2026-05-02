@@ -500,18 +500,22 @@ updateHeaderScrollCue();
             var box = document.createElement("div");
             box.className = "wedding-audio-hint__box";
 
-            var p = document.createElement("p");
-            p.id = "wedding-audio-hint-title";
-            p.className = "wedding-audio-hint__text";
-            p.textContent =
-                "本頁會播放背景音樂。若想關閉，請點選畫面右下角的音樂按鈕。";
+            var p1 = document.createElement("p");
+            p1.id = "wedding-audio-hint-title";
+            p1.className = "wedding-audio-hint__text";
+            p1.textContent = "本頁會播放背景音樂。";
+
+            var p2 = document.createElement("p");
+            p2.className = "wedding-audio-hint__text wedding-audio-hint__text--note";
+            p2.textContent = "* 若要關閉音樂，請點選右下角的圖示即可。";
 
             var btn = document.createElement("button");
             btn.type = "button";
             btn.className = "wedding-audio-hint__btn";
             btn.textContent = "知道了";
 
-            box.appendChild(p);
+            box.appendChild(p1);
+            box.appendChild(p2);
             box.appendChild(btn);
             hintRoot.appendChild(box);
 
