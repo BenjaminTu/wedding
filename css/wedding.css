@@ -206,6 +206,34 @@ header .header__scroll{
         box-sizing: border-box;
     }
 
+    /* Snap aligns the border box to the scrollport top; without this, margin-top
+       sits above the snap point and scrolls away, so cards look flush to the top.
+       Home `.mobile-snap-slot` is excluded: short cards are flex-centered in the
+       viewport — scroll-margin here adds uneven top gap vs bottom. */
+    .page-scroll > .mobile-snap-section:not(#header):not(.mobile-snap-slot) {
+        scroll-margin-top: max(1.25rem, calc(env(safe-area-inset-top, 0px) + 0.75rem));
+    }
+
+    /*
+     * Form: invite/intro use a transparent shell — if the snap section were shorter
+     * than the viewport, the next opaque card would peek under. Center content in
+     * the full-height step.
+     */
+    body:not(.page-home) #intro.panel-card.panel-card--invite,
+    body:not(.page-home) #invite.panel-card.panel-card--invite {
+        justify-content: center;
+    }
+
+    /*
+     * Form: Transportation is the same node as the snap section; min-height 100vh
+     * stretches the cream card taller than its copy and leaves a large empty band
+     * inside the card. Opaque block — safe to shrink. Home wraps this in
+     * `.mobile-snap-slot`, so only the form matches `.mobile-snap-section` here.
+     */
+    body:not(.page-home) #transportation.panel-card.mobile-snap-section {
+        min-height: unset;
+    }
+
     /*
      * Mandatory snap otherwise has no valid position past the last full section,
      * so the browser snaps back (e.g. to transportation). End-align the footer so
@@ -525,7 +553,7 @@ header .header__scroll{
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     position: relative;
 }
 
@@ -587,7 +615,7 @@ header .header__scroll{
 #transportation-content {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
 }
 
 .guide{

@@ -69,8 +69,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
-  margin: 0.5rem 0 0;
+  gap: 0.32rem;
+  margin: 0.3rem 0 0;
   text-align: center;
   font-size: inherit;
   font-weight: 400;
@@ -180,7 +180,7 @@ body {
   width: fit-content;
   max-width: 100%;
   margin-top: 0;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.4rem;
   margin-left: auto;
   margin-right: auto;
   padding-right: 1.2rem;
@@ -213,7 +213,7 @@ body {
   position: relative;
   top: auto;
   left: auto;
-  margin: 0 auto 0.6rem;
+  margin: 0 auto 0.38rem;
   z-index: 2;
   white-space: normal;
   text-align: center;
@@ -332,8 +332,8 @@ body {
 #intro.panel-card.panel-card--invite {
   position: relative;
   z-index: 5;
-  padding-top: 4rem;
-  padding-bottom: 4rem;
+  padding-top: 2.65rem;
+  padding-bottom: 2.65rem;
   max-width: 100%;
   width: 100%;
   margin-inline: 0;
@@ -351,12 +351,20 @@ body {
   gap: 0;
 }
 
+#invite.panel-card.panel-card--invite {
+  gap: 0.45rem;
+}
+
 #intro.panel-card.panel-card--invite {
   overflow: visible;
 }
 
 /* Invite window — same width scale as .intro-photo */
 #invite.panel-card.panel-card--invite > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
   width: min(42rem, 100%);
   max-width: 100%;
   box-sizing: border-box;
@@ -412,7 +420,7 @@ body {
   align-self: stretch;
   width: 100%;
   box-sizing: border-box;
-  padding: clamp(1.35rem, 3.5vw, 2rem) clamp(1.1rem, 3vw, 1.75rem) clamp(1.5rem, 3vw, 2.1rem);
+  padding: clamp(1rem, 2.8vw, 1.55rem) clamp(1.1rem, 3vw, 1.75rem) clamp(1.2rem, 2.8vw, 1.75rem);
   text-align: center;
   line-height: 1.85;
   letter-spacing: 0.06em;
@@ -465,8 +473,8 @@ body {
 
 /* Schedule */
 #schedule.panel-card {
-  padding-top: 3rem;
-  padding-bottom: 6rem;
+  padding-top: 1.85rem;
+  padding-bottom: 4.75rem;
   background: linear-gradient(180deg, rgba(var(--c1), 0.98) 0%, rgba(var(--c2), 0.95) 100%);
 }
 
@@ -476,24 +484,24 @@ body {
 
 @media screen and (max-width: 799px) {
   #schedule.panel-card #timeline {
-    padding-top: 1.25rem;
+    padding-top: 0.65rem;
   }
 
   #schedule.panel-card #timeline::before {
-    top: 3.6rem;
+    top: 2.65rem;
   }
 }
 
 @media screen and (min-width: 800px) {
   #schedule.panel-card #timeline {
-    padding-top: 1.25rem;
+    padding-top: 0.65rem;
   }
 }
 
 /* Transportation — same treatment as Schedule */
 #transportation.panel-card {
-  padding-top: 3rem;
-  padding-bottom: 6rem;
+  padding-top: 1.85rem;
+  padding-bottom: 2.65rem;
   background: linear-gradient(180deg, rgba(var(--c1), 0.98) 0%, rgba(var(--c2), 0.95) 100%);
 }
 
@@ -507,6 +515,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   padding: 0;
   background: transparent;
   border-radius: 0;
@@ -655,7 +664,7 @@ body {
 
 /* Dress code */
 #dresscode.panel-card {
-  padding: 5rem 1rem 6rem;
+  padding: 3.1rem 1rem 4.25rem;
   background: linear-gradient(165deg, rgba(var(--c1), 0.97) 0%, rgba(var(--c3), 0.94) 100%);
 }
 
@@ -664,7 +673,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 3.5rem 1rem 4rem;
+  padding: 2.2rem 1rem 3.1rem;
   background: linear-gradient(180deg, rgba(var(--c1), 0.98) 0%, rgba(var(--c2), 0.96) 100%);
 }
 
@@ -680,7 +689,7 @@ body {
 
 /* Countdown */
 .countdown-area.panel-card {
-  padding: 3rem 1rem 3.5rem;
+  padding: 1.85rem 1rem 2.75rem;
   background: linear-gradient(135deg, rgba(var(--c1), 0.98) 0%, rgba(var(--c3), 0.94) 100%);
   border: 1px solid rgba(var(--c2), 0.85);
 }
@@ -690,7 +699,7 @@ body {
 }
 
 .countdown-area.panel-card .countdown-area-box {
-  margin-top: 0.45rem;
+  margin-top: 0.22rem;
 }
 
 /* RSVP — same shell size / rhythm as Transportation */
@@ -698,8 +707,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 3rem;
-  padding-bottom: 3.25rem;
+  padding-top: 1.85rem;
+  padding-bottom: 2.65rem;
   padding-left: 0;
   padding-right: 0;
   background: linear-gradient(180deg, rgba(var(--c1), 0.98) 0%, rgba(var(--c2), 0.95) 100%);
@@ -910,7 +919,7 @@ footer.panel-card--footer .footer__monogram {
   #header .header__title {
     grid-row: 3;
     margin-top: 0;
-    gap: 0.55rem;
+    gap: 0.34rem;
   }
 
   /* Stable row height for scroll cue (clip-path animation on #scroll-line) */
