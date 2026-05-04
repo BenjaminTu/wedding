@@ -1,8 +1,151 @@
+/** English UI when the document root declares English (e.g. <html lang="en"> or in-place form toggle). */
+function weddingUiIsEnglish() {
+    var lang = (document.documentElement.getAttribute("lang") || "").toLowerCase();
+    return lang === "en" || lang.indexOf("en-") === 0;
+}
+
 function JumpTo(id) {
     var jumpto = document.getElementById(id);
     if (!jumpto) return;
     jumpto.scrollIntoView({ block: "start", behavior: "smooth" });
 }
+
+/** Form + home: zh/en in one URL — toggle document language + persist choice (localStorage weddingFormLocale). */
+(function weddingFormLangInPlace() {
+    var nav = document.querySelector(".form-lang-switch");
+    if (!nav || !nav.querySelector("[data-form-lang]")) return;
+
+    var STORAGE_KEY = "weddingFormLocale";
+
+    function docIsEnglish() {
+        var lang = (document.documentElement.getAttribute("lang") || "").toLowerCase();
+        return lang === "en" || lang.indexOf("en-") === 0;
+    }
+
+    function getDocTitle() {
+        var root = document.documentElement;
+        return docIsEnglish()
+            ? root.getAttribute("data-doc-title-en") || document.title
+            : root.getAttribute("data-doc-title-zh") || document.title;
+    }
+
+    function applyMapLocale() {
+        var map = window.WEDDING_FORM_MAP || {};
+        var iframe = document.getElementById("form-map-iframe");
+        if (!iframe) return;
+        var pack = docIsEnglish() ? map.en : map.zh;
+        if (!pack || !pack.src) return;
+        if (iframe.getAttribute("src") !== pack.src) iframe.setAttribute("src", pack.src);
+        iframe.setAttribute("title", pack.title || "");
+    }
+
+    function applyHeaderScrollLabel() {
+        var a = document.getElementById("form-header-scroll");
+        if (!a) return;
+        a.setAttribute("aria-label", docIsEnglish() ? "Scroll to content below" : "捲動至下方內容");
+    }
+
+    function applyRsvpIframeTitle() {
+        var iframe = document.getElementById("rsvp-google-form");
+        if (!iframe) return;
+        iframe.setAttribute("title", docIsEnglish() ? "Wedding RSVP form" : "婚禮 RSVP 表單");
+    }
+
+    /** Home page: album aria-labels + hint copy follow locale (no duplicate DOM for a11y). */
+    function applyHomeAlbumAria() {
+        if (!document.body.classList.contains("page-home")) return;
+        var en = docIsEnglish();
+        var gallery = document.getElementById("photo-gallery");
+        if (gallery) gallery.setAttribute("aria-label", en ? "Wedding album" : "婚禮相簿");
+        var stackOpen = document.getElementById("album-stack-open");
+        if (stackOpen) stackOpen.setAttribute("aria-label", en ? "Open full-screen gallery" : "開啟相簿大圖");
+        var hint = document.querySelector(".album-stack__hint");
+        if (hint) hint.textContent = en ? "Tap for full screen · swipe to browse" : "點擊看大圖 · 左右滑換圖";
+        var lb = document.getElementById("album-lightbox");
+        if (lb) lb.setAttribute("aria-label", en ? "Full-screen photo" : "相片全螢幕檢視");
+        var closeBtn = document.querySelector("#album-lightbox .album-lightbox__close");
+        if (closeBtn) closeBtn.setAttribute("aria-label", en ? "Close" : "關閉");
+        var prev = document.getElementById("album-lb-prev");
+        if (prev) prev.setAttribute("aria-label", en ? "Previous" : "上一張");
+        var next = document.getElementById("album-lb-next");
+        if (next) next.setAttribute("aria-label", en ? "Next" : "下一張");
+    }
+
+    function syncButtons() {
+        var isEn = docIsEnglish();
+        var buttons = nav.querySelectorAll(".form-lang-switch__btn[data-form-lang]");
+        for (var i = 0; i < buttons.length; i++) {
+            var btn = buttons[i];
+            var on = (btn.getAttribute("data-form-lang") === "en") === isEn;
+            btn.setAttribute("aria-pressed", on ? "true" : "false");
+        }
+    }
+
+    /** Toggle [data-form-lang] blocks (CSS backup is in panels.css; hidden is authoritative after JS runs). */
+    function applyFormLocaleVisibility() {
+        var isEn = docIsEnglish();
+        var els = document.querySelectorAll("[data-form-lang]");
+        for (var i = 0; i < els.length; i++) {
+            var el = els[i];
+            if (el.classList.contains("form-lang-switch__btn")) continue;
+            if (el.classList.contains("rsvp-embed-placeholder")) continue;
+            var lg = el.getAttribute("data-form-lang");
+            if (lg === "zh") el.hidden = isEn;
+            else if (lg === "en") el.hidden = !isEn;
+        }
+        syncRsvpPlaceholderLocale();
+    }
+
+    /** When RSVP iframe is not embedded, show only the hint for the active language. */
+    function syncRsvpPlaceholderLocale() {
+        var iframe = document.getElementById("rsvp-google-form");
+        if (!iframe || !iframe.hasAttribute("hidden")) return;
+        var isEn = docIsEnglish();
+        var hints = document.querySelectorAll("#RSVParea .rsvp-embed-placeholder[data-form-lang]");
+        for (var j = 0; j < hints.length; j++) {
+            var h = hints[j];
+            var lg = h.getAttribute("data-form-lang");
+            if (lg === "zh") h.hidden = isEn;
+            else if (lg === "en") h.hidden = !isEn;
+        }
+    }
+
+    function announceLocaleToDom() {
+        applyFormLocaleVisibility();
+        document.title = getDocTitle();
+        applyMapLocale();
+        applyHeaderScrollLabel();
+        applyRsvpIframeTitle();
+        applyHomeAlbumAria();
+        syncButtons();
+        try {
+            document.dispatchEvent(new CustomEvent("wedding:locale"));
+        } catch (e0) {}
+    }
+
+    function setLocale(lang) {
+        var isEn = lang === "en";
+        document.documentElement.lang = isEn ? "en" : "zh-Hant";
+        try {
+            localStorage.setItem(STORAGE_KEY, isEn ? "en" : "zh");
+        } catch (e1) {}
+        announceLocaleToDom();
+    }
+
+    nav.addEventListener("click", function (ev) {
+        var btn = ev.target.closest(".form-lang-switch__btn[data-form-lang]");
+        if (!btn || !nav.contains(btn)) return;
+        var lang = btn.getAttribute("data-form-lang");
+        if (lang === "zh") setLocale("zh");
+        else if (lang === "en") setLocale("en");
+    });
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", announceLocaleToDom);
+    } else {
+        announceLocaleToDom();
+    }
+})();
 
 /** Hero chevron: only while still in the first (header) section */
 function updateHeaderScrollCue() {
@@ -154,8 +297,29 @@ var x = setInterval(function() {
   if (elSecs) elSecs.innerHTML = seconds;
 
   if (elCountdown) {
-    elCountdown.innerHTML = "距離婚禮還剩 " + days + " 天<br>" + hours + " 小時 "
-      + minutes + " 分鐘 " + seconds + " 秒<br>讓我們一起期待吧！";
+    if (weddingUiIsEnglish()) {
+      elCountdown.innerHTML =
+        "Wedding in " +
+        days +
+        " days, " +
+        hours +
+        " hours, " +
+        minutes +
+        " minutes, " +
+        seconds +
+        " seconds<br>We can't wait to celebrate with you!";
+    } else {
+      elCountdown.innerHTML =
+        "距離婚禮還剩 " +
+        days +
+        " 天<br>" +
+        hours +
+        " 小時 " +
+        minutes +
+        " 分鐘 " +
+        seconds +
+        " 秒<br>讓我們一起期待吧！";
+    }
   }
 
   if (distance < 0) {
@@ -195,7 +359,7 @@ updateHeaderScrollCue();
 
     for (var s = 0; s < srcNodes.length; s++) {
         urls.push(srcNodes[s].getAttribute("src") || "");
-        alts.push(srcNodes[s].getAttribute("alt") || "婚禮相片");
+        alts.push(srcNodes[s].getAttribute("alt") || (weddingUiIsEnglish() ? "Wedding photo" : "婚禮相片"));
     }
 
     function setLayerBg(el, url) {
@@ -406,12 +570,29 @@ updateHeaderScrollCue();
 
     var audioToggleBtn = null;
 
+    document.addEventListener("wedding:locale", function () {
+        if (!audioToggleBtn) return;
+        audioToggleBtn.setAttribute("lang", weddingUiIsEnglish() ? "en" : "zh-Hant");
+        var sr = audioToggleBtn.querySelector(".wedding-audio-toggle__sr");
+        if (sr) sr.textContent = weddingUiIsEnglish() ? "Background music" : "背景音樂";
+        syncAudioToggle();
+    });
+
     function syncAudioToggle() {
         if (!audioToggleBtn) return;
         var playing = !audio.paused;
         audioToggleBtn.classList.toggle("wedding-audio-toggle--off", !playing);
         audioToggleBtn.setAttribute("aria-pressed", playing ? "true" : "false");
-        audioToggleBtn.setAttribute("aria-label", playing ? "關閉背景音樂" : "開啟背景音樂");
+        audioToggleBtn.setAttribute(
+            "aria-label",
+            playing
+                ? weddingUiIsEnglish()
+                    ? "Turn off background music"
+                    : "關閉背景音樂"
+                : weddingUiIsEnglish()
+                  ? "Turn on background music"
+                  : "開啟背景音樂"
+        );
     }
 
     function installAudioToggle() {
@@ -419,14 +600,19 @@ updateHeaderScrollCue();
         audioToggleBtn = document.createElement("button");
         audioToggleBtn.type = "button";
         audioToggleBtn.className = "wedding-audio-toggle";
-        audioToggleBtn.setAttribute("lang", "zh-Hant");
+        audioToggleBtn.setAttribute("lang", weddingUiIsEnglish() ? "en" : "zh-Hant");
         audioToggleBtn.innerHTML =
             '<svg class="wedding-audio-toggle__icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" width="22" height="22" aria-hidden="true">' +
             '<path d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />' +
             "</svg>" +
-            '<span class="wedding-audio-toggle__sr">背景音樂</span>';
+            '<span class="wedding-audio-toggle__sr">' +
+            (weddingUiIsEnglish() ? "Background music" : "背景音樂") +
+            "</span>";
         audioToggleBtn.setAttribute("aria-pressed", "false");
-        audioToggleBtn.setAttribute("aria-label", "開啟背景音樂");
+        audioToggleBtn.setAttribute(
+            "aria-label",
+            weddingUiIsEnglish() ? "Turn on background music" : "開啟背景音樂"
+        );
         var lastMusicToggleAt = 0;
         function handleMusicToggle(ev) {
             ev.stopPropagation();
@@ -495,7 +681,7 @@ updateHeaderScrollCue();
             hintRoot.setAttribute("role", "dialog");
             hintRoot.setAttribute("aria-modal", "true");
             hintRoot.setAttribute("aria-labelledby", "wedding-audio-hint-title");
-            hintRoot.setAttribute("lang", "zh-Hant");
+            hintRoot.setAttribute("lang", weddingUiIsEnglish() ? "en" : "zh-Hant");
 
             var box = document.createElement("div");
             box.className = "wedding-audio-hint__box";
@@ -503,16 +689,20 @@ updateHeaderScrollCue();
             var p1 = document.createElement("p");
             p1.id = "wedding-audio-hint-title";
             p1.className = "wedding-audio-hint__text";
-            p1.textContent = "本頁會播放背景音樂。";
+            p1.textContent = weddingUiIsEnglish()
+                ? "This page plays background music."
+                : "本頁會播放背景音樂。";
 
             var p2 = document.createElement("p");
             p2.className = "wedding-audio-hint__text wedding-audio-hint__text--note";
-            p2.textContent = "* 若要關閉音樂，請點選右下角的圖示即可。";
+            p2.textContent = weddingUiIsEnglish()
+                ? "* To turn it off, tap the icon in the lower-right corner."
+                : "* 若要關閉音樂，請點選右下角的圖示即可。";
 
             var btn = document.createElement("button");
             btn.type = "button";
             btn.className = "wedding-audio-hint__btn";
-            btn.textContent = "知道了";
+            btn.textContent = weddingUiIsEnglish() ? "Got it" : "知道了";
 
             box.appendChild(p1);
             box.appendChild(p2);

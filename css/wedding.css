@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Aboreto&family=Noto+Serif+TC:wght@400;500;600;700;900&family=Petit+Formal+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Aboreto&family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Noto+Serif+TC:wght@400;500;600;700;900&family=Petit+Formal+Script&display=swap');
 
 /* Palette: c1 lightest → c4 accent (body text uses harmonized ink for contrast) */
 :root {
@@ -64,6 +64,27 @@ body {
     font-size: 14px;
     font-weight: 600;
     line-height: 2;
+}
+
+/* English document language: Latin serif + looser tracking (not /form/ — see next rule) */
+html[lang="en"] body {
+    font-family: "Cormorant Garamond", "Noto Serif TC", Georgia, "Times New Roman", serif;
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+    text-indent: 0;
+}
+
+/*
+ * /form/ toggles <html lang> in place: keep the same body rhythm as Chinese (tracking, size, weight)
+ * so layout/spacing matches; English copy still uses Lora / DM Sans etc. from panels.css on those blocks.
+ */
+html[lang="en"] body.page-form {
+    font-family: 'Aboreto', 'Noto Serif TC', serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 3px;
+    text-indent: 3px;
 }
 
 ::selection{

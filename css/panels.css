@@ -129,6 +129,15 @@ body {
   text-transform: none;
 }
 
+#header .header__names:not([lang="zh-Hant"]) {
+  font-family: "Cormorant Garamond", "Noto Serif TC", Georgia, serif;
+}
+
+/* Form (/form/): hero title fonts stay like Chinese layout when UI language is EN */
+body.page-form #header .header__names:not([lang="zh-Hant"]) {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
 #header .header__scroll {
   position: absolute;
   left: 50%;
@@ -142,6 +151,75 @@ body {
 
 #header #scroll-line {
   color: rgba(255, 248, 242, 0.92);
+}
+
+/*
+ * Form + home: show one language at a time.
+ * Use :lang() + [lang] so toggling document.documentElement.lang always matches; wedding.js also sets [hidden].
+ */
+html:lang(zh-Hant) [data-form-lang="en"]:not(.form-lang-switch__btn),
+html[lang="zh-Hant"] [data-form-lang="en"]:not(.form-lang-switch__btn),
+html:lang(zh) [data-form-lang="en"]:not(.form-lang-switch__btn),
+html[lang="zh"] [data-form-lang="en"]:not(.form-lang-switch__btn) {
+  display: none !important;
+}
+
+html:lang(en) [data-form-lang="zh"]:not(.form-lang-switch__btn),
+html[lang="en"] [data-form-lang="zh"]:not(.form-lang-switch__btn) {
+  display: none !important;
+}
+
+/* Form + home: fixed zh / en switch */
+.form-lang-switch {
+  position: fixed;
+  top: max(0.45rem, env(safe-area-inset-top, 0px));
+  right: max(0.45rem, env(safe-area-inset-right, 0px));
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 0.28em;
+  padding: 0.32rem 0.62rem;
+  border-radius: 999px;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  background: rgba(42, 32, 26, 0.42);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 1px 14px rgba(40, 28, 22, 0.18);
+}
+
+.form-lang-switch__btn {
+  margin: 0;
+  padding: 0.12em 0.28em;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(255, 246, 238, 0.92);
+  font: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.form-lang-switch__btn:hover,
+.form-lang-switch__btn:focus-visible {
+  color: #fff;
+  outline: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.form-lang-switch__btn[aria-pressed="true"] {
+  color: #fff;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.form-lang-switch__sep {
+  color: rgba(255, 240, 230, 0.5);
+  user-select: none;
 }
 
 /* Shared “floating card” shell */
@@ -540,6 +618,55 @@ body {
   max-width: min(36rem, 100%);
 }
 
+html[lang="en"] #transportation.panel-card #transportation-content {
+  font-family: "Cormorant Garamond", "Noto Serif TC", Georgia, serif;
+  letter-spacing: 0.06em;
+}
+
+html[lang="en"] #transportation.panel-card .theplace .map-open-link {
+  font-family: "Cormorant Garamond", "Noto Serif TC", Georgia, serif;
+}
+
+html[lang="en"] #transportation.panel-card .theplace__zh {
+  font-family: "Noto Serif TC", "Songti TC", serif;
+}
+
+html[lang="en"] body:not(.page-form) #header .header__date {
+  font-family: "Cormorant Garamond", Georgia, serif;
+}
+
+/* English form: story + invite copy — Lora (readable editorial serif) */
+html[lang="en"] #intro.panel-card.panel-card--invite .intro-content.intro-content--unified,
+html[lang="en"] #intro.panel-card.panel-card--invite .intro-content.intro-content--unified p {
+  font-family: "Lora", Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+html[lang="en"]
+  #intro.panel-card.panel-card--invite
+  .intro-content.intro-content--unified
+  p
+  .intro-content__lede {
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: 0.03em;
+}
+
+html[lang="en"] #invite.panel-card.panel-card--invite.invite p {
+  font-family: "Lora", Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  letter-spacing: 0.025em;
+  line-height: 1.78;
+}
+
+/* English form: address / MRT / parking — DM Sans (legible, slightly softer than geometric sans) */
+html[lang="en"] #transportation.panel-card.panel-card--cream .guide {
+  font-family: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
 #transportation.panel-card .theplace {
   margin: 0 auto 0.35rem;
   text-align: center;
@@ -586,9 +713,9 @@ body {
 }
 
 #transportation.panel-card .theplace__en {
-  font-family: ui-serif, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+  font-family: "Cormorant Garamond", ui-serif, Georgia, serif;
   font-size: 0.74em;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.4;
   letter-spacing: 0.08em;
   color: rgba(255, 255, 255, 0.92);
@@ -702,6 +829,15 @@ body {
 
 .countdown-area.panel-card .countdown-area-box {
   margin-top: 0.22rem;
+}
+
+/* Home countdown: English sign-off — script face; same optical size band as zh line above (.countdown-area.panel-card > p). */
+#countdown-area.panel-card > p.countdown-area__tagline .countdown-area__tagline-en {
+  font-family: "Petit Formal Script", "Cormorant Garamond", ui-serif, Georgia, serif;
+  font-size: clamp(0.875rem, 2.4vw, 1rem);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  line-height: 1.85;
 }
 
 /* RSVP — same shell size / rhythm as Transportation */
@@ -822,6 +958,14 @@ footer.panel-card--footer {
 footer.panel-card--footer > div {
   padding: 0;
   color: rgba(255, 255, 255, 0.95);
+}
+
+body.page-form footer.panel-card--footer [data-form-lang="en"],
+body.page-home footer.panel-card--footer [data-form-lang="en"] {
+  font-family: "Lora", Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  letter-spacing: 0.07em;
+  line-height: 1.65;
 }
 
 footer.panel-card--footer div a:link,

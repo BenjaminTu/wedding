@@ -1,12 +1,23 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html
+  lang="zh-Hant"
+  data-doc-title-zh="Benjamin and Ellen｜婚禮"
+  data-doc-title-en="Benjamin and Ellen | Wedding"
+>
   <head>
     <meta charset="utf-8" />
+    <script>
+      (function () {
+        try {
+          if (localStorage.getItem("weddingFormLocale") === "en") document.documentElement.lang = "en";
+        } catch (e) {}
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <link rel="icon" type="image/png" sizes="512x512" href="../images/favicon.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="../images/favicon-192.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="../images/apple-touch-icon.png" />
-    <title>Benjamin and Ellen</title>
+    <title>Benjamin and Ellen｜婚禮</title>
     <meta name="description" content="Save the Date for the wedding of Benjamin and Ellen!" />
     <meta property="og:title" content="Benjamin and Ellen" />
     <!-- If you use a custom domain, replace https://benjamintu.github.io/wedding below -->
@@ -29,9 +40,26 @@
         /** 背景音：請放「已剪好、可無縫循環」的短 MP3；瀏覽器用 native loop 重播整檔 */
         audioSrc: "../audio/bg-loop.mp3",
       };
+      window.WEDDING_FORM_MAP = {
+        zh: {
+          src: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.7580642!2d121.5292725!3d25.0932318!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442aea38840c8d1%3A0x8b304b3001673820!2sRenaissance%20Taipei%20Shihlin%20Hotel!5e0!3m2!1szh-TW!2stw!4v1700000000000!5m2!1szh-TW!2stw",
+          title: "台北士林萬麗酒店（婚宴會場）",
+        },
+        en: {
+          src: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.7580642!2d121.5292725!3d25.0932318!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442aea38840c8d1%3A0x8b304b3001673820!2sRenaissance%20Taipei%20Shihlin%20Hotel!5e0!3m2!1sen!2stw!4v1700000000000!5m2!1sen!2stw",
+          title: "Renaissance Taipei Shihlin Hotel (wedding venue)",
+        },
+      };
     </script>
   </head>
   <body class="page-home">
+    <nav class="form-lang-switch" aria-label="語言 / Language">
+      <button type="button" class="form-lang-switch__btn" data-form-lang="zh" aria-pressed="true" lang="zh-Hant">
+        中文
+      </button>
+      <span class="form-lang-switch__sep" aria-hidden="true">·</span>
+      <button type="button" class="form-lang-switch__btn" data-form-lang="en" aria-pressed="false" lang="en">EN</button>
+    </nav>
     <div class="bg" id="homebg"></div>
     <div class="bg" id="secondbg"></div>
 
@@ -60,6 +88,7 @@
         </span>
       </h1>
       <a
+        id="form-header-scroll"
         class="header__scroll"
         href="javascript:void(0)"
         onclick="JumpTo('intro')"
@@ -86,12 +115,22 @@
             <img src="../images/invite2-web.jpg" alt="" width="908" height="1198" loading="lazy" />
           </figure>
           <div class="intro-content intro-content--unified">
-            <p lang="zh-Hant">
-              <span class="intro-content__lede">「古靈精怪的她 x 溫暖幽默的他」</span>
-              <span class="intro-content__divider" aria-hidden="true">✦──────── ♥ ────────✦</span>
-              那段異國、異地的七年時光，我們隔著螢幕與城市，陪伴彼此、見證了最青澀的成長。<br />
-              就在相識的第十年，我們決定帶著這份無可取代的默契，堅定地邁向人生下一個篇章.ᐟ.ᐟ
-            </p>
+            <div data-form-lang="zh" lang="zh-Hant">
+              <p lang="zh-Hant">
+                <span class="intro-content__lede">「古靈精怪的她 x 溫暖幽默的他」</span>
+                <span class="intro-content__divider" aria-hidden="true">✦──────── ♥ ────────✦</span>
+                那段異國、異地的七年時光，我們隔著螢幕與城市，陪伴彼此、見證了最青澀的成長。<br />
+                就在相識的第十年，我們決定帶著這份無可取代的默契，堅定地邁向人生下一個篇章.ᐟ.ᐟ
+              </p>
+            </div>
+            <div data-form-lang="en" lang="en">
+              <p>
+                <span class="intro-content__lede">“Her wild heart × His quiet warmth”</span>
+                <span class="intro-content__divider" aria-hidden="true">✦──────── ♥ ────────✦</span>
+                Seven years apart in different countries and cities, yet always side by side<br />
+                A decade after we first met, we’re carrying this bond into the next chapter of our lives.ᐟᐟ
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -103,46 +142,66 @@
         <h2 id="invite-heading" class="">we’re getting married</h2>
         <div class="invite-img"></div>
       </div>
-      <p class="">
-        誠摯邀請您於 2026.10.03（六）<br />
-        蒞臨台北士林萬麗酒店<br />與我們一同分享這份喜悅
-      </p>
+      <div data-form-lang="zh" lang="zh-Hant">
+        <p class="">
+          誠摯邀請您於 2026.10.03（六）<br />
+          蒞臨台北士林萬麗酒店<br />與我們一同分享這份喜悅
+        </p>
+      </div>
+      <div data-form-lang="en" lang="en">
+        <p class="">
+          We warmly invite you to join us on Saturday, October 3, 2026<br />
+          at the Renaissance Taipei Shihlin Hotel<br />to share in our joy.
+        </p>
+      </div>
       </div>
     </div>
 
     <div class="mobile-snap-section mobile-snap-slot">
       <div class="countdown-area panel-card panel-card--cream" id="countdown-area">
-      <h2>Wedding Countdown</h2>
+      <h2>
+        <span data-form-lang="zh" lang="zh-Hant">婚禮倒數</span>
+        <span data-form-lang="en" lang="en">Wedding countdown</span>
+      </h2>
 
-      <p>距離婚禮還有</p>
+      <p>
+        <span data-form-lang="zh" lang="zh-Hant">距離婚禮還有</span>
+        <span data-form-lang="en" lang="en">Until the wedding</span>
+      </p>
       <div class="countdown-area-box">
         <div id="days">0</div>
         <div id="hours">0</div>
         <div id="mins">0</div>
         <div id="secs">0</div>
-        <p>Days</p>
-        <p>Hours</p>
-        <p>Mins</p>
-        <p>Secs</p>
+        <p><span data-form-lang="zh" lang="zh-Hant">天</span><span data-form-lang="en" lang="en">Days</span></p>
+        <p><span data-form-lang="zh" lang="zh-Hant">時</span><span data-form-lang="en" lang="en">Hours</span></p>
+        <p><span data-form-lang="zh" lang="zh-Hant">分</span><span data-form-lang="en" lang="en">Mins</span></p>
+        <p><span data-form-lang="zh" lang="zh-Hant">秒</span><span data-form-lang="en" lang="en">Secs</span></p>
       </div>
-      <p>期待與你們見面！</p>
+      <p class="countdown-area__tagline">
+        <span data-form-lang="zh" lang="zh-Hant">期待與你們見面！</span>
+        <span data-form-lang="en" lang="en" class="countdown-area__tagline-en">Counting down to our day with you.</span>
+      </p>
       </div>
     </div>
 
     <div class="mobile-snap-section mobile-snap-slot">
       <div id="schedule" class="panel-card panel-card--cream">
-      <h2>Schedule</h2>
+      <h2>
+        <span data-form-lang="zh" lang="zh-Hant">流程</span>
+        <span data-form-lang="en" lang="en">Schedule</span>
+      </h2>
       <div id="timeline">
-        <div class="time" id="time1">待定</div>
-        <div class="time" id="time2">待定</div>
+        <div class="time" id="time1"><span data-form-lang="zh" lang="zh-Hant">待定</span><span data-form-lang="en" lang="en">TBD</span></div>
+        <div class="time" id="time2"><span data-form-lang="zh" lang="zh-Hant">待定</span><span data-form-lang="en" lang="en">TBD</span></div>
         <div class="time" id="time3">1830</div>
-        <div class="time" id="time4">待定</div>
-        <div class="time" id="time5">待定</div>
-        <div class="activity" id="activity1">（待訂）</div>
-        <div class="activity" id="activity2">（待訂）</div>
-        <div class="activity" id="activity3">開席</div>
-        <div class="activity" id="activity4">（待訂）</div>
-        <div class="activity" id="activity5">（待訂）</div>
+        <div class="time" id="time4"><span data-form-lang="zh" lang="zh-Hant">待定</span><span data-form-lang="en" lang="en">TBD</span></div>
+        <div class="time" id="time5"><span data-form-lang="zh" lang="zh-Hant">待定</span><span data-form-lang="en" lang="en">TBD</span></div>
+        <div class="activity" id="activity1"><span data-form-lang="zh" lang="zh-Hant">（待訂）</span><span data-form-lang="en" lang="en">(TBD)</span></div>
+        <div class="activity" id="activity2"><span data-form-lang="zh" lang="zh-Hant">（待訂）</span><span data-form-lang="en" lang="en">(TBD)</span></div>
+        <div class="activity" id="activity3"><span data-form-lang="zh" lang="zh-Hant">開席</span><span data-form-lang="en" lang="en">Dinner begins</span></div>
+        <div class="activity" id="activity4"><span data-form-lang="zh" lang="zh-Hant">（待訂）</span><span data-form-lang="en" lang="en">(TBD)</span></div>
+        <div class="activity" id="activity5"><span data-form-lang="zh" lang="zh-Hant">（待訂）</span><span data-form-lang="en" lang="en">(TBD)</span></div>
       </div>
       </div>
     </div>
@@ -150,17 +209,20 @@
     <div class="mobile-snap-section mobile-snap-slot">
       <div id="dresscode" class="panel-card panel-card--cream">
       <div class="dresscode-box">
-        <h2>Dress code</h2>
+        <h2>
+          <span data-form-lang="zh" lang="zh-Hant">服裝建議</span>
+          <span data-form-lang="en" lang="en">Dress code</span>
+        </h2>
         <div id="dresscode-content">
           <div id="dresscode-grid">
             <div class="circle" id="circle1"></div>
-            <div>待定</div>
+            <div><span data-form-lang="zh" lang="zh-Hant">待定</span><span data-form-lang="en" lang="en">TBD</span></div>
             <div class="circle" id="circle2"></div>
-            <div>待定</div>
+            <div><span data-form-lang="zh" lang="zh-Hant">待定</span><span data-form-lang="en" lang="en">TBD</span></div>
             <div class="circle" id="circle3"></div>
-            <div>待定</div>
+            <div><span data-form-lang="zh" lang="zh-Hant">待定</span><span data-form-lang="en" lang="en">TBD</span></div>
             <div class="circle" id="circle4"></div>
-            <div>待定</div>
+            <div><span data-form-lang="zh" lang="zh-Hant">待定</span><span data-form-lang="en" lang="en">TBD</span></div>
           </div>
         </div>
       </div>
@@ -169,10 +231,14 @@
 
     <div class="mobile-snap-section mobile-snap-slot">
       <div id="transportation" class="panel-card panel-card--cream">
-      <h2>Transportation</h2>
+      <h2>
+        <span data-form-lang="zh" lang="zh-Hant">交通</span>
+        <span data-form-lang="en" lang="en">Transportation</span>
+      </h2>
       <div id="transportation-box">
         <div class="map map--embed">
           <iframe
+            id="form-map-iframe"
             title="台北士林萬麗酒店（婚宴會場）"
             width="600"
             height="380"
@@ -195,35 +261,70 @@
               <span class="theplace__en" lang="en">Renaissance Taipei Shihlin Hotel</span>
             </a>
           </div>
-          <div class="guide">
-            <div>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="currentColor" width="14px" height="14px" style="padding-top: 7px">
-                <path
-                  d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"
-                ></path>
-              </svg>
-            </div>
-            <div>台北市士林區中山北路五段 470 巷 8 號</div>
+          <div data-form-lang="zh" lang="zh-Hant">
+            <div class="guide">
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="currentColor" width="14px" height="14px" style="padding-top: 7px">
+                  <path
+                    d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"
+                  ></path>
+                </svg>
+              </div>
+              <div>台北市士林區中山北路五段 470 巷 8 號</div>
 
-            <div>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" width="14px" height="14px" style="padding-top: 7px">
-                <path
-                  d="M96 0C43 0 0 43 0 96L0 352c0 48 35.2 87.7 81.1 94.9l-46 46C28.1 499.9 33.1 512 43 512l39.7 0c8.5 0 16.6-3.4 22.6-9.4L160 448l128 0 54.6 54.6c6 6 14.1 9.4 22.6 9.4l39.7 0c10 0 15-12.1 7.9-19.1l-46-46c46-7.1 81.1-46.9 81.1-94.9l0-256c0-53-43-96-96-96L96 0zM64 96c0-17.7 14.3-32 32-32l256 0c17.7 0 32 14.3 32 32l0 96c0 17.7-14.3 32-32 32L96 224c-17.7 0-32-14.3-32-32l0-96zM224 288a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"
-                ></path>
-              </svg>
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" width="14px" height="14px" style="padding-top: 7px">
+                  <path
+                    d="M96 0C43 0 0 43 0 96L0 352c0 48 35.2 87.7 81.1 94.9l-46 46C28.1 499.9 33.1 512 43 512l39.7 0c8.5 0 16.6-3.4 22.6-9.4L160 448l128 0 54.6 54.6c6 6 14.1 9.4 22.6 9.4l39.7 0c10 0 15-12.1 7.9-19.1l-46-46c46-7.1 81.1-46.9 81.1-94.9l0-256c0-53-43-96-96-96L96 0zM64 96c0-17.7 14.3-32 32-32l256 0c17.7 0 32 14.3 32 32l0 96c0 17.7-14.3 32-32 32L96 224c-17.7 0-32-14.3-32-32l0-96zM224 288a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"
+                  ></path>
+                </svg>
+              </div>
+              <div>
+                搭乘捷運至士林站,由2號出口出站,步行約8分鐘即可抵達 <br />
+              </div>
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" width="14px" height="14px" style="padding-top: 7px">
+                  <path
+                    d="M135.2 117.4L109.1 192l293.8 0-26.1-74.6C372.3 104.6 360.2 96 346.6 96L165.4 96c-13.6 0-25.7 8.6-30.2 21.4zM39.6 196.8L74.8 96.3C88.3 57.8 124.6 32 165.4 32l181.2 0c40.8 0 77.1 25.8 90.6 64.3l35.2 100.5c23.2 9.6 39.6 32.5 39.6 59.2l0 144 0 48c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-48L96 400l0 48c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-48L0 256c0-26.7 16.4-49.6 39.6-59.2zM128 288a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm288 32a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"
+                  ></path>
+                </svg>
+              </div>
+              <div>
+                自行開車前往者,可將車輛停放於士林萬麗停車場 <br />
+              </div>
             </div>
-            <div>
-              搭乘捷運至士林站,由2號出口出站,步行約8分鐘即可抵達 <br />
-            </div>
-            <div>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" width="14px" height="14px" style="padding-top: 7px">
-                <path
-                  d="M135.2 117.4L109.1 192l293.8 0-26.1-74.6C372.3 104.6 360.2 96 346.6 96L165.4 96c-13.6 0-25.7 8.6-30.2 21.4zM39.6 196.8L74.8 96.3C88.3 57.8 124.6 32 165.4 32l181.2 0c40.8 0 77.1 25.8 90.6 64.3l35.2 100.5c23.2 9.6 39.6 32.5 39.6 59.2l0 144 0 48c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-48L96 400l0 48c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-48L0 256c0-26.7 16.4-49.6 39.6-59.2zM128 288a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm288 32a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"
-                ></path>
-              </svg>
-            </div>
-            <div>
-              自行開車前往者,可將車輛停放於士林萬麗停車場 <br />
+          </div>
+          <div data-form-lang="en" lang="en">
+            <div class="guide">
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" fill="currentColor" width="14px" height="14px" style="padding-top: 7px">
+                  <path
+                    d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"
+                  ></path>
+                </svg>
+              </div>
+              <div>No. 8, Lane 470, Section 5, Zhongshan North Road, Shilin District, Taipei City</div>
+
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="currentColor" width="14px" height="14px" style="padding-top: 7px">
+                  <path
+                    d="M96 0C43 0 0 43 0 96L0 352c0 48 35.2 87.7 81.1 94.9l-46 46C28.1 499.9 33.1 512 43 512l39.7 0c8.5 0 16.6-3.4 22.6-9.4L160 448l128 0 54.6 54.6c6 6 14.1 9.4 22.6 9.4l39.7 0c10 0 15-12.1 7.9-19.1l-46-46c46-7.1 81.1-46.9 81.1-94.9l0-256c0-53-43-96-96-96L96 0zM64 96c0-17.7 14.3-32 32-32l256 0c17.7 0 32 14.3 32 32l0 96c0 17.7-14.3 32-32 32L96 224c-17.7 0-32-14.3-32-32l0-96zM224 288a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"
+                  ></path>
+                </svg>
+              </div>
+              <div>
+                Take the MRT to Shilin Station, use Exit 2, then walk about 8 minutes to the hotel.<br />
+              </div>
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" width="14px" height="14px" style="padding-top: 7px">
+                  <path
+                    d="M135.2 117.4L109.1 192l293.8 0-26.1-74.6C372.3 104.6 360.2 96 346.6 96L165.4 96c-13.6 0-25.7 8.6-30.2 21.4zM39.6 196.8L74.8 96.3C88.3 57.8 124.6 32 165.4 32l181.2 0c40.8 0 77.1 25.8 90.6 64.3l35.2 100.5c23.2 9.6 39.6 32.5 39.6 59.2l0 144 0 48c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-48L96 400l0 48c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-48L0 256c0-26.7 16.4-49.6 39.6-59.2zM128 288a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm288 32a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"
+                  ></path>
+                </svg>
+              </div>
+              <div>
+                If you’re driving, you may park at the hotel parking garage.<br />
+              </div>
             </div>
           </div>
         </div>
@@ -233,7 +334,10 @@
 
     <div class="mobile-snap-section mobile-snap-slot">
       <div class="photo-video panel-card panel-card--cream">
-      <h2>Album</h2>
+      <h2>
+        <span data-form-lang="zh" lang="zh-Hant">婚禮相簿</span>
+        <span data-form-lang="en" lang="en">Album</span>
+      </h2>
       <div id="photo-gallery" class="photo-gallery-inline" aria-label="婚禮相簿">
         <div class="album-src-list" hidden aria-hidden="true">
           <img src="../images/gallery1.JPG" alt="Gallery 1" width="2000" height="1333" />
@@ -280,7 +384,8 @@
     </div>
 
     <footer class="panel-card--footer">
-      <div>2026.10.03 期待與大家見面♡</div>
+      <div data-form-lang="zh" lang="zh-Hant">2026.10.03 期待與大家見面♡</div>
+      <div data-form-lang="en" lang="en">October 3, 2026 — We can’t wait to see you ♡</div>
       <img
         class="footer__monogram"
         src="../images/logo.png"
